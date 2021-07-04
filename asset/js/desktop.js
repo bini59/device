@@ -236,7 +236,7 @@ const load_posts = (event)=>{
                     {% for category in post.categories %}
                         if("{{category}}" == id){
                             icons += `
-                            <div class="document icon" id="{{post.title}}">
+                            <div class="document icon" id="{{post.title}}" onclick="load_post(event)">
                                 <img src="/asset/img/icons/post.png">
                                 <div>{{post.title}}</div>
                             </div>
@@ -301,4 +301,41 @@ const load_search = (event)=>{
     search_num += 1;
     
     
+}
+
+const load_post = (event)=>{
+    let id;
+    for(var i = 0; i < event.path.length; i ++){
+        if(event.path[i].classList && event.path[i].classList[0] == "document"){
+            id = event.path[i].id;
+        }
+    } 
+    let folder = createfolder();
+    folder.innerHTML += `
+    <section class="windows-head">
+        <span class="windows-title">${id}</span>
+        <div class="windows-control">
+            <div class="windows-minimum">─</div>
+            <div class="windows-size" onclick="full_screen(event)">□</div>
+            <div class="windows-exit" onclick="exit(event)">Ｘ</div>
+        </div>
+    </section>
+    `
+    {% for post in site.posts %}
+        var title = "{{post.title}}"
+        title = title.replace(/\&\#91;/, "[")
+        title = title.replace(/\&\#93;/, "]")
+        
+        if(id == title){
+            folder.innerHTML += `
+            <section class="windows-post">
+                <iframe class="post" src="{{post.url | site.base_url}}">
+            </section>
+            `
+        }
+    {% endfor %}
+
+    position[0] += 30;position[1] += 30;z_index+=1;
+    $(".container")[0].appendChild(folder);
+
 }

@@ -17,9 +17,9 @@ layout: default
 </div>
 <div class="index-title">
     <div class="index-title-name">
-        <h1>bini59's blog</h1>
-        <span>@bini59</span>
-        <h3>this blog is abcdefghi</h3>
+        <h1>{{site.title}}</h1>
+        <span>@{{site.username}}</span>
+        <h3>{{site.description}}</h3>
     </div>
     
 </div>
@@ -45,5 +45,7 @@ layout: default
         <img class="logout" src="/asset/img/onoff.png">
     </div>
 </div>
+
+{{site.categories["Algorithm"].title}}
 
 <script type="text/javascript" src="/asset/js/index.js"></script>
