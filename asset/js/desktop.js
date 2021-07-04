@@ -3,6 +3,7 @@
 
 let position = [60, 40]
 let z_index = 5;
+let search_num = 0
 
 window.onload = ()=>{
     $("#github")[0].addEventListener("click", ()=>{
@@ -95,8 +96,8 @@ const float_folder = (event)=>{
         <section class="windows-container">
             <section class="windows-sidebar">
                 <div class="windows-sidelist">
-                    <span>Category</span>
-                    <span>Search</span>
+                    <div class="folder sidebar-menu" onclick="float_folder(event)" id="category">Category</div>
+                    <div class="folder sidebar-menu" onclick="load_search(event)" id="saerch">Search</div>
                 </div>
             </section>
             <section class="windows-contents">
@@ -112,7 +113,7 @@ const float_folder = (event)=>{
         </section>
     </div>
     `
-    position[0] += 10;position[1] += 10;z_index+=1;
+    position[0] += 30;position[1] += 30;z_index+=1;
     $(".container")[0].innerHTML += folder;
 }
 
@@ -126,28 +127,83 @@ const sub_category = (event)=>{
 
     let folders = `<div class="icons">`
 
-    let category_str = '{% for category in site.category %}{% for item in category %}{{item}},{% endfor %} {% endfor %}';
-    let category = category_str.split(" ");
-    for(var i = 0; i < category.length; i++){
-        category[i] = category[i].split(",");
-        if (category[i][0] == id){
-            for(var j = 1; j < category[i].length-1; j++){
-                folders += `
-                <div class="folder icon" id="${category[i][j]}" onclick="load_posts(event)">
-                    <img src="/asset/img/icons/category.png">
-                    <div>${category[i][j]}</div>
-                </div>
-                `
-            }
+    {% for category in site.category %}
+        if(id == "{{category[0]}}"){
+            {% for item in category %}
+                if ("{{item}}" != "{{category[0]}}"){
+                    folders += `
+                    <div class="folder icon" id="{{item}}" onclick="load_posts(event)">
+                        <img src="/asset/img/icons/category.png">
+                        <div>{{item}}</div>
+                    </div>
+                    `
+                }
+            {% endfor %}
         }
-    }
+    {% endfor %}
     folders += '</div>'
 
     for(var i = 0; i < event.path.length; i ++){
         if(event.path[i].classList && event.path[i].classList[0] == "windows-contents"){
             event.path[i].innerHTML = folders;
+    }
+    } 
+}
+
+const float_folder_sub = (event)=>{
+    let id;
+    
+    for(var i = 0; i < event.path.length; i ++){
+        if(event.path[i].classList && event.path[i].classList[0] == "folder"){
+            id = event.path[i].id;
         }
     } 
+    let categories = `
+        <div class="icons">
+
+    `
+    {% for category in site.category %}
+        if(id == "{{category[0]}}"){
+            {% for item in category %}
+                if ("{{item}}" != "{{category[0]}}"){
+
+                    categories += `
+                    <div class="folder icon" id="{{item}}" onclick="load_posts(event)">
+                        <img src="/asset/img/icons/category.png">
+                        <div>{{item}}</div>
+                    </div>
+                    `
+                }
+            {% endfor %}
+        }
+    {% endfor %}
+
+    let folder = `
+    <div class="file-explorer windows" style="left:${position[0]}px;top:${position[1]}px;z-index:${z_index}" draggable="true" ondragstart="dragstart(event)" onmousedown="uproot(event)">
+        <section class="windows-head">
+            <span class="windows-title">${id}</span>
+            <div class="windows-control">
+                <div class="windows-minimum">─</div>
+                <div class="windows-size" onclick="full_screen(event)">□</div>
+                <div class="windows-exit" onclick="exit(event)">Ｘ</div>
+            </div>
+        </section>
+        <section class="windows-container">
+            <section class="windows-sidebar">
+                <div class="windows-sidelist">
+                    <div class="folder sidebar-menu" onclick="float_folder(event)" id="category">Category</div>
+                    <div class="folder sidebar-menu" onclick="load_search(event)" id="saerch">Search</div>
+                </div>
+            </section>
+            <section class="windows-contents">
+                ${categories}
+                </div>
+            </section>
+        </section>
+    </div>
+    `
+    position[0] += 30;position[1] += 30;z_index+=1;
+    $(".container")[0].innerHTML += folder;
 }
 
 const load_posts = (event)=>{
@@ -187,19 +243,48 @@ const load_posts = (event)=>{
 }
 
 
-// toggle category list
-const toggle_sub = (event)=>{
-    let target = event.srcElement.dataset.target;
-    if($(`.${target}`)[0].ariaExpanded === "false"){
-        let height = $(`.${target}`)[0].children[0].children.length * 20;
-        // $(`.${target}`)[0].style.display = "block"
-        $(`.${target}`)[0].style.height = `${height}px`;
-        // $(`.${target}`)[0].ariaExpanded = "true"
-    }
-    if($(`.${target}`)[0].ariaExpanded === "true"){
-        let height = $(`.${target}`)[0].children[0].children.length * 20;
-        // $(`.${target}`)[0].style.display = ""
-        $(`.${target}`)[0].style.height = `0px`;
-        $(`.${target}`)[0].ariaExpanded = "false"
-    }
+
+// search folder
+const load_search = (event)=>{
+    let id;
+    
+    for(var i = 0; i < event.path.length; i ++){
+        if(event.path[i].classList && event.path[i].classList[0] == "folder"){
+            id = event.path[i].id;
+        }
+    } 
+    let folder = `
+    <div class="file-explorer windows" style="left:${position[0]}px;top:${position[1]}px;z-index:${z_index}" draggable="true" ondragstart="dragstart(event)" onmousedown="uproot(event)">
+        <section class="windows-head">
+            <span class="windows-title">${id}</span>
+            <div class="windows-control">
+                <div class="windows-minimum">─</div>
+                <div class="windows-size" onclick="full_screen(event)">□</div>
+                <div class="windows-exit" onclick="exit(event)">Ｘ</div>
+            </div>
+        </section>
+        <section class="windows-container">
+            <section class="windows-sidebar">
+                <div class="windows-sidelist">
+                    <div class="folder sidebar-menu" onclick="float_folder(event)" id="category">Category</div>
+                    <div class="folder sidebar-menu" onclick="load_search(event)" id="saerch">Search</div>
+                </div>
+            </section>
+            <section class="windows-contents">
+                <input class="input_search" id='search${search_num}' type='text'>
+                <div class="icons folder-icons">
+                
+                </div>
+            </section>
+        </section>
+    </div>
+    `
+
+    position[0] += 30;position[1] += 30;z_index+=1;
+    $(".container")[0].innerHTML += folder;
+    
+    set_search(search_num);
+    search_num += 1;
+    
+    
 }

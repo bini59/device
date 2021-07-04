@@ -39,6 +39,8 @@
         &:hover{
             background-color: #949494;
         }
+
+
     }
 
     .workspace-time{
@@ -79,7 +81,8 @@
     -ms-transition: all 0.5s;  
     -o-transition: all 0.5s;  
     transition: all 0.5s;  
-    
+
+
 
     .side-bar{
         display: flex;
@@ -124,6 +127,15 @@
             content: "Categories";
             font-size: 1.2rem;
             font-weight: 400;
+        }
+
+        .popup-list{
+            margin: 5px;
+            cursor: pointer;
+    
+            &:hover{
+                color: #75eb8f;
+            }
         }
     }
 }

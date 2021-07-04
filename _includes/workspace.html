@@ -4,9 +4,11 @@
             <div class="profile"><img src="/asset/img/profile.png"></div>
             <div class="logout"><img src="/asset/img/onoff.png"></div>
         </div>
-        <ul class="categories">
-            
-        </ul>
+        <div class="categories">
+            {% for category in site.category %}
+                <div class="folder popup-list" id="{{category[0]}}" onclick="float_folder_sub(event)">{{category[0]}}</div>
+            {% endfor %}
+        </div>
     </div>
     
     <div class="workspace">
