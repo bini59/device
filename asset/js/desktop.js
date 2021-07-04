@@ -5,11 +5,13 @@ let position = [60, 40]
 let z_index = 5;
 let search_num = 0
 
+
+
 window.onload = ()=>{
     $("#github")[0].addEventListener("click", ()=>{
         let name = $("#github")[0].attributes.name.value;
         location.assign(`https://github.com/${name}`);
-    })
+    }, false)
 }
 
 
@@ -75,6 +77,19 @@ const drop = (event)=>{
 }
 
 // open the window(category folder, search folder)
+const createfolder = ()=>{
+    let folder = document.createElement("div");
+    folder.setAttribute("class", "file-explorer windows");
+    folder.setAttribute("draggable", "true")
+    folder.setAttribute("ondragstart", "dragstart(event)")
+    folder.setAttribute("onmousedown", "uproot(event)")
+    folder.style.left = `${position[0]}px`
+    folder.style.top = `${position[1]}px`
+    folder.style.zIndex = `${z_index}`
+
+    return folder
+}
+
 const float_folder = (event)=>{
     let id;
     
@@ -83,8 +98,9 @@ const float_folder = (event)=>{
             id = event.path[i].id;
         }
     } 
-    let folder = `
-    <div class="file-explorer windows" style="left:${position[0]}px;top:${position[1]}px;z-index:${z_index}" draggable="true" ondragstart="dragstart(event)" onmousedown="uproot(event)">
+
+    let folder = createfolder();
+    folder.innerHTML = `
         <section class="windows-head">
             <span class="windows-title">${id}</span>
             <div class="windows-control">
@@ -111,10 +127,9 @@ const float_folder = (event)=>{
                 </div>
             </section>
         </section>
-    </div>
     `
     position[0] += 30;position[1] += 30;z_index+=1;
-    $(".container")[0].innerHTML += folder;
+    $(".container")[0].appendChild(folder);
 }
 
 const sub_category = (event)=>{
@@ -178,8 +193,9 @@ const float_folder_sub = (event)=>{
         }
     {% endfor %}
 
-    let folder = `
-    <div class="file-explorer windows" style="left:${position[0]}px;top:${position[1]}px;z-index:${z_index}" draggable="true" ondragstart="dragstart(event)" onmousedown="uproot(event)">
+    let folder = createfolder();
+    folder.innerHTML += 
+    `
         <section class="windows-head">
             <span class="windows-title">${id}</span>
             <div class="windows-control">
@@ -200,10 +216,9 @@ const float_folder_sub = (event)=>{
                 </div>
             </section>
         </section>
-    </div>
     `
     position[0] += 30;position[1] += 30;z_index+=1;
-    $(".container")[0].innerHTML += folder;
+    $(".container")[0].appendChild(folder);
 }
 
 const load_posts = (event)=>{
@@ -253,8 +268,8 @@ const load_search = (event)=>{
             id = event.path[i].id;
         }
     } 
-    let folder = `
-    <div class="file-explorer windows" style="left:${position[0]}px;top:${position[1]}px;z-index:${z_index}" draggable="true" ondragstart="dragstart(event)" onmousedown="uproot(event)">
+    let folder = createfolder();
+    folder.innerHTML += `
         <section class="windows-head">
             <span class="windows-title">${id}</span>
             <div class="windows-control">
@@ -277,11 +292,10 @@ const load_search = (event)=>{
                 </div>
             </section>
         </section>
-    </div>
     `
 
     position[0] += 30;position[1] += 30;z_index+=1;
-    $(".container")[0].innerHTML += folder;
+    $(".container")[0].appendChild(folder);
     
     set_search(search_num);
     search_num += 1;

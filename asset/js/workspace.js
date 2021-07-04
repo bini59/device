@@ -22,8 +22,8 @@ $(".container")[0].addEventListener("click", ()=>{
 
 $(".menu-icon")[0].addEventListener("click", ()=>{
     if(popup_toggle)
-    $(".popup-menu")[0].style="transform:translateY(-20rem);" 
+    $(".popup-menu")[0].style="height: 17rem;" 
     else
-    $(".popup-menu")[0].style="transform:translateY(0rem);"
+    $(".popup-menu")[0].style="height: 0rem;"
     popup_toggle = !popup_toggle;
 })
