@@ -1,4 +1,24 @@
 ---
-layout: default
+layout: desktop
 ---
+<div class="container" ondrop="drop(event)" ondragover="dragover(event)">
+    <div class="icons">
+        <div class="folder icon" id="category" onclick="float_folder(event)">
+            <img src="/asset/img/icons/category.png">
+            <span>category</span>
+        </div>
+        <div class="folder icon" id="search" onclick="float_folder(event)">
+            <img src="/asset/img/icons/search.png">
+            <span>search</span>
+        </div>
+        <div class="shortcut icon" id="github" name="{{site.github_username}}">
+            <img src="/asset/img/icons/github.png">
+            <span>github</span>
+        </div>
+    </div>
 
+</div>
+
+
+
+<script type="text/javascript" src="/asset/js/desktop.js"></script>
