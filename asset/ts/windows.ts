@@ -1,3 +1,30 @@
+---
+---
+
+
+
+let cateogry_string = ''
+{% for category in site.category %}
+    {% for item in category %}
+        cateogry_string += "{{item}},"
+    {% endfor %}
+    cateogry_string += " "
+{% endfor %}
+
+let category = [
+
+]
+
+category = cateogry_string.split(' ');
+category.splice(category.length-1, 1);
+for (let index = 0; index < category.length; index++) {
+    category[index] = category[index].split(',')
+    category[index].splice(category[index].length-1, 1);
+}
+
+console.log(category);
+
+
 class BiniHead extends HTMLElement{
     private window:BiniWindow;
 
@@ -78,9 +105,14 @@ class BiniWindow extends HTMLElement{
         BiniWindow.position[1] += 50;
         BiniWindow.z_index += 1;
 
-        let id = this.getAttribute("id")
+        let id = this.getAttribute("id");
+        let form = this.getAttribute("data-form");
+
+        let contents = form == "folder" ? `<bini-folder id=${id}><bini-folder>` : `<bini-post id="${id}></bini-post>`
+
         this.innerHTML = `
             <bini-windowhead name="${id}"></bini-windowHead>
+            ${contents}
         `
 
         this.onclick = (event)=>{
@@ -101,4 +133,55 @@ class BiniWindow extends HTMLElement{
     // called when one of attributes listed above is modified
     }
 
+}
+
+
+class Folder extends HTMLElement{
+    constructor(){
+        super();
+    }
+    connectedCallback() {
+        var items = ``
+
+        var folderName = this.getAttribute("id");
+        if(folderName == "category"){
+            var temp = []
+            for (let i = 0; i < category.length; i++)
+                temp.push(category[i][0]);
+            items = this.getCategory(temp);
+        }
+        for (const item in category) {
+            let t = item.indexOf(folderName);
+            if(t == 0)
+                items = this.getCategory(item);
+        }
+
+        
+    }
+
+    getCategory(category:Array<string>){
+        var folders = ''
+        for (let i = 0; i < category.length; i++) {
+            folders += `
+            <div class="folder icon" id="${category[i]}" onclick="sub_category(event)">
+                <img src="/asset/img/icons/category.png">
+                <div>${category[i]}</div>
+            </div>
+            `
+        }
+
+        return folders;
+    }
+
+    getPosts(posts:Array<object>){
+
+    }
+
+    static get observedAttributes() {
+        return [/* array of attribute names to monitor for changes */];
+    }
+
+    attributeChangedCallback(name:string, oldValue:any, newValue:any) {
+    // called when one of attributes listed above is modified
+    }
 }

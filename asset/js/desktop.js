@@ -5,6 +5,12 @@ let position = [60, 40]
 let z_index = 5;
 let search_num = 0
 
+{% for category in site.categories %} 
+    {% for post in category %} 
+        console.log("{{post.title}}");
+    {% endfor %}    
+{% endfor %}
+
 
 
 window.onload = ()=>{
